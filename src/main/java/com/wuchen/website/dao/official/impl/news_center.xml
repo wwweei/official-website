@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuchen.website.dao.official.NewsCenterDao">
+    <!-- 对象映射，可以不写 -->
+    
+    <select id="getComNewsDetail" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    	SELECT cn.id			as "newsId",
+    		   cn.title			as "title",
+    		   cn.content		as "content",
+    		   u.userName		as "author",
+    		   cn.kind			as "kind",
+    		   cn.savetime		as "saveTime"
+    		FROM com_news cn
+    		LEFT JOIN user u on u.id = cn.author
+			WHERE cn.id = #{newsId}
+    </select>
+    
+    <select id="getTradeNewsDetail" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    	SELECT tn.id			as "newsId",
+    		   tn.title			as "title",
+    		   tn.content		as "content",
+    		   u.userName		as "author",
+    		   tn.kind			as "kind",
+    		   tn.savetime		as "saveTime"
+    		FROM trade_news tn
+    		LEFT JOIN user u on u.id = tn.author
+			WHERE tn.id = #{newsId}
+    </select>
+    
+    <select id="getComNewsList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    	SELECT cn.id			as "newsId",
+    		   cn.title			as "title",
+    		   cn.content		as "content",
+    		   u.userName		as "author",
+    		   cn.kind			as "kind",
+    		   cn.savetime		as "saveTime"
+    		FROM com_news cn
+    		LEFT JOIN user u on u.id = cn.author
+    		WHERE cn.status = 1
+    	ORDER BY cn.savetime DESC
+    </select>
+    
+    <select id="getTradeNewsList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    	SELECT tn.id			as "newsId",
+    		   tn.title			as "title",
+    		   tn.content		as "content",
+    		   u.userName		as "author",
+    		   tn.kind			as "kind",
+    		   tn.savetime		as "saveTime"
+    		FROM trade_news tn
+    		LEFT JOIN user u on u.id = tn.author
+    		WHERE tn.status = 1
+			ORDER BY tn.savetime DESC
+    </select>
+    
+    <select id="getAllNewsList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    	SELECT tn.id			as "newsId",
+    		   tn.title			as "title",
+    		   tn.content		as "content",
+    		   tn.author		as "author",
+    		   tn.kind			as "kind",
+    		   tn.savetime		as "saveTime"
+    		FROM trade_news tn
+    		WHERE tn.status = 1
+    	UNION ALL
+    	SELECT cn.id			as "newsId",
+    		   cn.title			as "title",
+    		   cn.content		as "content",
+    		   cn.author		as "author",
+    		   cn.kind			as "kind",
+    		   cn.savetime		as "saveTime"
+    		FROM com_news cn
+    		WHERE cn.status = 1
+			ORDER BY savetime DESC
+    </select>
+    
+</mapper>

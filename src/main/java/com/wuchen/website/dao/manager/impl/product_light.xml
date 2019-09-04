@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuchen.website.dao.manager.ProductLightDao">
+    <!-- 对象映射，可以不写 -->
+    
+    <!-- 查询功能，resultType 设置返回值类型 -->
+	<select id="getLightDetail" parameterType="java.lang.String" resultType="com.wuchen.website.entity.ProductLight">
+		SELECT  pl.ID								as "id",
+				pl.product_name						as "productName",
+				pc.class_name						as "productClazz",
+				pl.product_clazz_id					as "productClazzId",
+				pl.product_no						as "productNo",
+				pl.reflector						as "reflector",
+				pl.ceiling							as "ceiling",
+				pl.lamp_source						as "lampSource",
+				pl.lumen_output						as "lumenOutput",
+				pl.colour_temperature				as "colourTemperature",
+				pl.power							as "power",
+				pl.system_efficiency				as "system_efficiency",
+				pl.average_life						as "average_life",
+				pl.CRI								as "CRI",
+				pl.optimum_working_temperature		as "optimumWorkingTemperature",
+				pl.heat_sink						as "heatSink",
+				pl.cable							as "cable",
+				pl.insulation						as "insulation",
+				pl.protection						as "protection",
+				pl.product_pic						as "product_pic",
+				pl.product_detail_pic				as "product_detail_pic",
+				pl.savetime							as "saveTime"
+			FROM product_light pl
+			LEFT JOIN product_class pc 
+						ON pl.product_clazz_id = pc.id
+			WHERE pl.ID = #{id}
+	</select>
+	
+   	<select id="getLightList" parameterType="java.util.Map" resultType="com.wuchen.website.entity.ProductLight">
+   		SELECT  pl.ID								as "id",
+				pl.product_name						as "productName",
+				pc.class_name						as "productClazz",
+				pl.product_no						as "productNo",
+				pl.reflector						as "reflector",
+				pl.ceiling							as "ceiling",
+				pl.lamp_source						as "lampSource",
+				pl.lumen_output						as "lumenOutput",
+				pl.colour_temperature				as "colourTemperature",
+				pl.power							as "power",
+				pl.system_efficiency				as "system_efficiency",
+				pl.CRI								as "CRI",
+				pl.optimum_working_temperature		as "optimumWorkingTemperature",
+				pl.heat_sink						as "heatSink",
+				pl.cable							as "cable",
+				pl.insulation						as "insulation",
+				pl.protection						as "protection",
+				pl.savetime							as "saveTime"
+			FROM product_light pl
+			LEFT JOIN product_class pc 
+						ON pl.product_clazz_id = pc.id
+			<where>
+				<trim prefix="(" suffix=")" prefixOverrides="AND">
+					<if test="id != null and id != ''">
+						pl.ID = #{id}
+					</if>
+					<if test="productName != null and productName != ''">
+						pl.product_name = #{productName}
+					</if>
+					<if test="product_clazz_id != null and product_clazz_id != ''">
+						pl.product_clazz_id = #{productClazz}
+					</if>
+				</trim>
+			</where>
+   	</select>
+   	
+   	<delete	id="deleteLight" parameterType="java.lang.String">
+   		DELETE FROM product_light WHERE id = #{id}
+   	</delete>
+   	
+   	<insert id="saveLight" parameterType="com.wuchen.website.entity.ProductLight"  useGeneratedKeys="true" keyProperty="id">
+   		INSERT INTO product_light
+   			<trim prefix="(" suffix=")" suffixOverrides=",">
+   				<if test="productName != null and productName != ''">
+   					product_name,
+   				</if>
+   				<if test="productNo != null and productNo != ''">
+   					product_no,
+   				</if>
+   				<if test="productClazz != null and productClazz != ''">
+   					product_clazz_id,
+   				</if>
+   				<if test="reflector != null and reflector != ''">
+   					reflector,
+   				</if>
+   				<if test="ceiling != null and ceiling != ''">
+   					ceiling,
+   				</if>
+   				<if test="lampSource != null and lampSource != ''">
+   					lamp_source,
+   				</if>
+   				<if test="lumenOutput != null and lumenOutput != ''">
+   					lumen_output,
+   				</if>
+   				<if test="colourTemperature != null and colourTemperature != ''">
+   					colour_temperature,
+   				</if>
+   				<if test="power != null and power != ''">
+   					power,
+   				</if>
+   				<if test="system_efficiency != null and system_efficiency != ''">
+   					system_efficiency,
+   				</if>
+   				<if test="average_life != null and average_life != ''">
+   					average_life,
+   				</if>
+   				<if test="CRI != null and CRI != ''">
+   					CRI,
+   				</if>
+   				<if test="optimumWorkingTemperature != null and optimumWorkingTemperature != ''">
+   					optimum_working_temperature,
+   				</if>
+   				<if test="heatSink != null and heatSink != ''">
+   					heat_sink,
+   				</if>
+   				<if test="cable != null and cable != ''">
+   					cable,
+   				</if>
+   				<if test="insulation != null and insulation != ''">
+   					insulation,
+   				</if>
+   				<if test="protection != null and protection != ''">
+   					protection,
+   				</if>
+   				<if test="product_pic != null and product_pic != ''">
+   					product_pic,
+   				</if>
+   				<if test="product_detail_pic != null and product_detail_pic != ''">
+   					product_detail_pic,
+   				</if>
+   				<if test="saveTime != null and saveTime != ''">
+   					saveTime
+   				</if>
+   			</trim>
+   			VALUES
+   			<trim prefix="(" suffix=")" suffixOverrides=",">
+   				<if test="productName != null and productName != ''">
+   					#{productName},
+   				</if>
+   				<if test="productNo != null and productNo != ''">
+   					#{productNo},
+   				</if>
+   				<if test="productClazz != null and productClazz != ''">
+   					#{productClazz},
+   				</if>
+   				<if test="reflector != null and reflector != ''">
+   					#{reflector},
+   				</if>
+   				<if test="ceiling != null and ceiling != ''">
+   					#{ceiling},
+   				</if>
+   				<if test="lampSource != null and lampSource != ''">
+   					#{lampSource},
+   				</if>
+   				<if test="lumenOutput != null and lumenOutput != ''">
+   					#{lumenOutput},
+   				</if>
+   				<if test="colourTemperature != null and colourTemperature != ''">
+   					#{colourTemperature},
+   				</if>
+   				<if test="power != null and power != ''">
+   					#{power},
+   				</if>
+   				<if test="system_efficiency != null and system_efficiency != ''">
+   					#{system_efficiency},
+   				</if>
+   				<if test="average_life != null and average_life != ''">
+   					#{average_life},
+   				</if>
+   				<if test="CRI != null and CRI != ''">
+   					#{CRI},
+   				</if>
+   				<if test="optimumWorkingTemperature != null and optimumWorkingTemperature != ''">
+   					#{optimumWorkingTemperature},
+   				</if>
+   				<if test="heatSink != null and heatSink != ''">
+   					#{heatSink},
+   				</if>
+   				<if test="cable != null and cable != ''">
+   					#{cable},
+   				</if>
+   				<if test="insulation != null and insulation != ''">
+   					#{insulation},
+   				</if>
+   				<if test="protection != null and protection != ''">
+   					#{protection},
+   				</if>
+   				<if test="product_pic != null and product_pic != ''">
+   					#{product_pic},
+   				</if>
+   				<if test="product_detail_pic != null and product_detail_pic != ''">
+   					#{product_detail_pic},
+   				</if>
+   				<if test="saveTime != null and saveTime != ''">
+   					#{saveTime}
+   				</if>
+   			</trim>
+   	</insert>
+   	
+   	<update id="updateLight" parameterType="com.wuchen.website.entity.ProductLight">
+   		UPDATE product_light
+   		<set>
+   			<if test="productName != null and productName != ''">
+   					product_name = #{productName},
+   				</if>
+   				<if test="productNo != null and productNo != ''">
+   					product_no = #{productNo},
+   				</if>
+   				<if test="productClazz != null and productClazz != ''">
+   					product_clazz_id = #{productClazz},
+   				</if>
+   				<if test="reflector != null and reflector != ''">
+   					reflector = #{reflector},
+   				</if>
+   				<if test="ceiling != null and ceiling != ''">
+   					ceiling = #{ceiling},
+   				</if>
+   				<if test="lampSource != null and lampSource != ''">
+   					lamp_source = #{lampSource},
+   				</if>
+   				<if test="lumenOutput != null and lumenOutput != ''">
+   					lumen_output = #{lumenOutput},
+   				</if>
+   				<if test="colourTemperature != null and colourTemperature != ''">
+   					colour_temperature = #{colourTemperature},
+   				</if>
+   				<if test="power != null and power != ''">
+   					power = #{power},
+   				</if>
+   				<if test="system_efficiency != null and system_efficiency != ''">
+   					system_efficiency = #{system_efficiency},
+   				</if>
+   				<if test="average_life != null and average_life != ''">
+   					average_life = #{average_life},
+   				</if>
+   				<if test="CRI != null and CRI != ''">
+   					CRI = #{CRI},
+   				</if>
+   				<if test="optimumWorkingTemperature != null and optimumWorkingTemperature != ''">
+   					optimum_working_temperature = #{optimumWorkingTemperature},
+   				</if>
+   				<if test="heatSink != null and heatSink != ''">
+   					heat_sink = #{heatSink},
+   				</if>
+   				<if test="cable != null and cable != ''">
+   					cable = #{cable},
+   				</if>
+   				<if test="insulation != null and insulation != ''">
+   					insulation = #{insulation},
+   				</if>
+   				<if test="protection != null and protection != ''">
+   					protection = #{protection},
+   				</if>
+   				<if test="product_pic != null and product_pic != ''">
+   					product_pic = #{product_pic},
+   				</if>
+   				<if test="product_detail_pic != null and product_detail_pic != ''">
+   					product_detail_pic = #{product_detail_pic},
+   				</if>
+   		</set>
+   		WHERE id = #{id}
+   	</update>
+   	
+</mapper>

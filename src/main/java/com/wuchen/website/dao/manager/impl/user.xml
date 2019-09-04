@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuchen.website.dao.manager.UserDao">
+    <!-- 对象映射，可以不写 -->
+    
+    <!-- 查询功能，resultType 设置返回值类型 -->
+   <insert id="addUser" parameterType="com.wuchen.website.entity.User">
+   		INSERT INTO user(account, userName, userPwd, userStatus, userState, createTime)
+   			VALUES (#{account}, #{userName}, #{userPwd}, #{userStatus}, #{userState}, #{createTime})
+   </insert>
+   
+   <select id="userLogin" parameterType="com.wuchen.website.entity.User" resultType="com.wuchen.website.entity.User">
+   		SELECT u.ID					as "userId",
+			   u.account			as "account",
+			   u.userStatus			as "userStatus",
+			   u.userState			as "userState",
+			   u.createTime			as "creatime"
+ 				FROM `user` u where u.account = #{account} and u.userPwd = #{userPwd}
+   </select>
+   
+   <select id="checkAcntExist" parameterType="java.lang.String" resultType="java.util.Map">
+   		SELECT COUNT(u.account) as "acntCount" 
+   			FROM user u WHERE u.account = #{acnt}
+   </select>
+   
+   <select id="getUserList" resultType="com.wuchen.website.entity.User">
+   		SELECT  u.ID			as "userId",
+   				u.account		as "account",
+   				u.userName		as "userName",
+   				u.userPwd		as "userPwd",
+   				u.userStatus	as "userStatus",
+   				u.userState		as "userState",
+   				u.createTime	as "createTime"
+   			FROM user u
+   </select>
+   
+   <select id="getTotalUserNum" resultType="java.util.Map">
+   		SELECT COUNT(ID)	as "total" FROM user
+   </select>
+   
+   <delete id="deleteUser" parameterType="java.lang.String">
+   		DELETE FROM user WHERE ID IN
+   		<foreach collection="array" separator="," item="id" open="(" close=")">
+	   		#{id}
+	   	</foreach>
+   </delete>
+   
+   <update id="updateUser" parameterType="java.util.Map">
+   		UPDATE user u 
+	   		<set>
+	   			<if test="userState != null and userState != ''">
+	   				u.userState = #{userState},
+	   			</if>
+	   			<if test="userStatus != null and userStatus != ''">
+	   				u.userStatus = #{userStatus},
+	   			</if>
+	   		</set>
+	   		WHERE u.ID = #{id}
+   </update>
+</mapper>

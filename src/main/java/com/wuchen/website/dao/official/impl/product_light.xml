@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuchen.website.dao.official.LightProductDao">
+    <!-- 对象映射，可以不写 -->
+    
+    <!-- 主页中显示的四件产品 -->
+    <select id="getLightListForIndex" resultType="com.wuchen.website.entity.ProductLight">
+    	SELECT  pl.ID								as "id",
+				pl.product_name						as "productName",
+				pc.class_name						as "productClazz",
+				pl.product_clazz_id					as "productClazzId",
+				pl.product_no						as "productNo",
+				pl.reflector						as "reflector",
+				pl.ceiling							as "ceiling",
+				pl.lamp_source						as "lampSource",
+				pl.lumen_output						as "lumenOutput",
+				pl.colour_temperature				as "colourTemperature",
+				pl.power							as "power",
+				pl.system_efficiency				as "system_efficiency",
+				pl.average_life						as "average_life",
+				pl.CRI								as "CRI",
+				pl.optimum_working_temperature		as "optimumWorkingTemperature",
+				pl.heat_sink						as "heatSink",
+				pl.cable							as "cable",
+				pl.insulation						as "insulation",
+				pl.protection						as "protection",
+				pl.product_pic						as "product_pic",
+				pl.product_detail_pic				as "product_detail_pic",
+				pl.savetime							as "saveTime"
+			FROM product_light pl
+			LEFT JOIN product_class pc 
+						ON pl.product_clazz_id = pc.id
+			ORDER BY pl.savetime DESC
+			LIMIT 0, 3
+    </select>
+    
+    <select id="getProClazzList" resultType="com.wuchen.website.entity.ProductMenuTree">
+		SELECT  pc.ID				as "id",
+				pc.class_name		as "text",
+				pc.parentId			as "parentId"
+			FROM product_class pc
+   </select>
+    
+    
+    <select id="getProductLightList" resultType="com.wuchen.website.entity.ProductLight" parameterType="java.util.Map">
+    	SELECT  pl.ID								as "id",
+				pl.product_name						as "productName",
+				pc.class_name						as "productClazz",
+				pl.product_clazz_id					as "productClazzId",
+				pl.product_no						as "productNo",
+				pl.product_pic						as "product_pic",
+				pl.product_detail_pic				as "product_detail_pic",
+				pl.savetime							as "saveTime"
+			FROM product_light pl
+			LEFT JOIN product_class pc 
+						ON pl.product_clazz_id = pc.id
+			<where>
+				<if test="clazzIdList != null and clazzIdList != ''">
+				pl.product_clazz_id in
+				<foreach collection="clazzIdList" separator="," item="id" open="(" close=")">
+			   		#{id}
+			   	</foreach>
+				</if>
+			</where>
+			ORDER BY pl.savetime DESC
+    </select>
+    
+    
+    <select id="getLightDetail" resultType="com.wuchen.website.entity.ProductLight" parameterType="java.util.Map">
+    	SELECT  pl.ID								as "id",
+				pl.product_name						as "productName",
+				pc.class_name						as "productClazz",
+				pl.product_clazz_id					as "productClazzId",
+				pl.product_no						as "productNo",
+				pl.reflector						as "reflector",
+				pl.ceiling							as "ceiling",
+				pl.lamp_source						as "lampSource",
+				pl.lumen_output						as "lumenOutput",
+				pl.colour_temperature				as "colourTemperature",
+				pl.power							as "power",
+				pl.system_efficiency				as "system_efficiency",
+				pl.average_life						as "average_life",
+				pl.CRI								as "CRI",
+				pl.optimum_working_temperature		as "optimumWorkingTemperature",
+				pl.heat_sink						as "heatSink",
+				pl.cable							as "cable",
+				pl.insulation						as "insulation",
+				pl.protection						as "protection",
+				pl.product_pic						as "product_pic",
+				pl.product_detail_pic				as "product_detail_pic",
+				pl.savetime							as "saveTime"
+			FROM product_light pl
+			LEFT JOIN product_class pc 
+						ON pl.product_clazz_id = pc.id
+			WHERE pl.id = #{id}
+    </select>
+    
+</mapper>

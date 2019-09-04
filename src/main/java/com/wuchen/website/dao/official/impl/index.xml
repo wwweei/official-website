@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuchen.website.dao.official.IndexDao">
+    <!-- 对象映射，可以不写 -->
+    
+    <!-- 获取主页滚动图片 -->
+    <select id="getMainPic" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    	SELECT i.id			as "imgId",
+    		   i.page_name	as "pageName",
+    		   i.class_name	as "className",
+    		   i.url		as "url",
+    		   i.weight		as "weight",
+    		   i.isShow		as "isShow"
+    		FROM images i 
+    		WHERE i.isShow = 1
+    		ORDER BY i.weight ASC
+    </select>
+    
+    <!-- 主页中显示的四条内部新闻 -->
+    <select id="getComNews" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    	SELECT cn.id			as "newsId",
+    		   cn.title			as "title",
+    		   cn.content		as "content",
+    		   cn.author		as "author",
+    		   cn.kind			as "kind",
+    		   cn.savetime		as "saveTime"
+    		FROM com_news cn
+    		WHERE cn.status = 1
+    		ORDER BY cn.savetime DESC
+    		LIMIT 0, 4
+    </select>
+    
+    <!-- 主页中显示的四条行业新闻 -->
+    <select id="getTradeNews" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    	SELECT tn.id			as "newsId",
+    		   tn.title			as "title",
+    		   tn.content		as "content",
+    		   tn.author		as "author",
+    		   tn.kind			as "kind",
+    		   tn.savetime		as "saveTime"
+    		FROM trade_news tn
+    		WHERE tn.status = 1
+    		ORDER BY tn.savetime DESC
+    		LIMIT 0, 4
+    </select>
+    
+</mapper>

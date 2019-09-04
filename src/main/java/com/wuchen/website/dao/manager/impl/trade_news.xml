@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuchen.website.dao.manager.TradeNewsDao">
+    <!-- 对象映射，可以不写 -->
+    
+    <!-- 查询功能，resultType 设置返回值类型 -->
+	<select id="getTradeNewsDetail" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT  tn.ID				as "ID",
+				tn.title			as "title",
+				tn.content			as "content",
+			FROM trade_news tn
+			<where>
+			
+			</where>
+	</select>
+
+   <select id="getTradeNewsList" resultType="java.util.Map" parameterType="java.util.Map">
+   		SELECT  tn.ID				as "ID",
+   				tn.title			as "title",
+   				tn.savetime			as "saveTime",
+   				tn.updatetime		as "updateTime",
+   				tn.status			as "status",
+   				tn.kind				as "kind",
+   				u.userName			as "author"
+   			FROM trade_news tn
+   			left join user u on tn.author = u.id
+   			<where>
+   				<if test="id != null and id != ''">
+   					tn.id = #{id}
+   				</if>
+   				<if test="title != null and title != ''">
+   					AND tn.title like %#{title}%
+   				</if>
+   				<if test="author != null and author != ''">
+   					AND tn.author = #{author}
+   				</if>
+   				<if test="beganSaveTime != null and beganSaveTime != ''">
+   					AND tn.saveTime &lt;= #{endSaveTime}
+   				</if>
+   				<if test="endSaveTime != null and endSaveTime != ''">
+   					AND tn.saveTime &gt;= #{endSaveTime}
+   				</if>
+   				<if test="beganUpdateTime != null and beganUpdateTime != ''">
+   					AND tn.updateTime &lt;= #{beganUpdateTime}
+   				</if>
+   				<if test="endUpdateTime != null and endUpdateTime != ''">
+   					AND tn.updateTime &gt;= #{endUpdateTime}
+   				</if>
+   			</where>
+   			LIMIT #{tradeNewsIndex}, #{pageSize}
+   </select>
+   
+   <select id="getTotalTradeNewsNum" resultType="java.util.Map" parameterType="java.util.Map">
+   		SELECT COUNT(ID)	as "total" FROM trade_news tn 
+   			<where>
+   				<if test="id != null and id != ''">
+   					tn.id = #{id}
+   				</if>
+   				<if test="title != null and title != ''">
+   					AND tn.title like %#{title}%
+   				</if>
+   				<if test="author != null and author != ''">
+   					AND tn.author = #{author}
+   				</if>
+   				<if test="beganSaveTime != null and beganSaveTime != ''">
+   					AND tn.saveTime &lt;= #{endSaveTime}
+   				</if>
+   				<if test="endSaveTime != null and endSaveTime != ''">
+   					AND tn.saveTime &gt;= #{endSaveTime}
+   				</if>
+   				<if test="beganUpdateTime != null and beganUpdateTime != ''">
+   					AND tn.updateTime &lt;= #{beganUpdateTime}
+   				</if>
+   				<if test="endUpdateTime != null and endUpdateTime != ''">
+   					AND tn.updateTime &gt;= #{endUpdateTime}
+   				</if>
+   			</where>
+   </select>
+   
+   <delete id="deleteTradeNews" parameterType="java.lang.String">
+   		DELETE FROM trade_news WHERE ID IN
+   		<foreach collection="array" separator="," item="id" open="(" close=")">
+	   		#{id}
+	   	</foreach>
+   </delete>
+   
+   <insert id="saveTradeNews" parameterType="java.util.Map">
+   		INSERT INTO trade_news
+   			<trim prefix="(" suffix=")" suffixOverrides=",">
+   				title,saveTime,author,
+   				<if test="content != null and content != ''">
+   					content,
+   				</if>
+   				<if test="status != null and status != ''">
+   					status,
+   				</if>
+   			</trim>
+   			VALUES
+   			<trim prefix="(" suffix=")" suffixOverrides=",">
+   				#{title},#{saveTime},#{author},
+   				<if test="content != null and content != ''">
+   					#{content},
+   				</if>
+   				<if test="status != null and status != ''">
+   					#{status}
+   				</if>
+   			</trim>
+   			<selectKey resultType="java.lang.Integer" keyProperty="id" >
+            	SELECT @@IDENTITY AS "ID"
+        	</selectKey>
+   </insert>
+   
+   <update id="updateTradeNews" parameterType="java.util.Map" >
+   		UPDATE trade_news 
+   			<set>
+   			<if test="status != null and status != ''">status = #{status},</if>
+   			<if test="content != null and content != ''">content = #{content}</if>
+   			</set>
+   			WHERE ID = #{id}
+   </update>
+   
+   
+</mapper>

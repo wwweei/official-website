@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuchen.website.dao.manager.CaseDao">
+    <!-- 对象映射，可以不写 -->
+    
+    <!-- 查询功能，resultType 设置返回值类型 -->
+
+
+   <select id="getCaseList" resultType="java.util.Map" parameterType="java.util.Map">
+   		SELECT  c.ID				as "ID",
+   				c.title				as "title",
+   				c.savetime			as "saveTime",
+   				c.updatetime		as "updateTime",
+   				c.status			as "status",
+   				u.userName			as "author"
+   			FROM com_case c
+   			left join user u on c.author = u.id
+   			<where>
+   				<if test="id != null and id != ''">
+   					c.id = #{id}
+   				</if>
+   				<if test="title != null and title != ''">
+   					AND c.title like %#{title}%
+   				</if>
+   				<if test="author != null and author != ''">
+   					AND c.author = #{author}
+   				</if>
+   				<if test="beganSaveTime != null and beganSaveTime != ''">
+   					AND c.saveTime &lt;= #{endSaveTime}
+   				</if>
+   				<if test="endSaveTime != null and endSaveTime != ''">
+   					AND c.saveTime &gt;= #{endSaveTime}
+   				</if>
+   				<if test="beganUpdateTime != null and beganUpdateTime != ''">
+   					AND c.updateTime &lt;= #{beganUpdateTime}
+   				</if>
+   				<if test="endUpdateTime != null and endUpdateTime != ''">
+   					AND c.updateTime &gt;= #{endUpdateTime}
+   				</if>
+   			</where>
+   			LIMIT #{caseIndex}, #{pageSize}
+   </select>
+   
+   <select id="getTotalCaseNum" resultType="java.util.Map" parameterType="java.util.Map">
+   		SELECT COUNT(ID)	as "total" FROM com_case c 
+   			<where>
+   				<if test="id != null and id != ''">
+   					c.id = #{id}
+   				</if>
+   				<if test="title != null and title != ''">
+   					AND c.title like %#{title}%
+   				</if>
+   				<if test="author != null and author != ''">
+   					AND c.author = #{author}
+   				</if>
+   				<if test="beganSaveTime != null and beganSaveTime != ''">
+   					AND c.saveTime &lt;= #{endSaveTime}
+   				</if>
+   				<if test="endSaveTime != null and endSaveTime != ''">
+   					AND c.saveTime &gt;= #{endSaveTime}
+   				</if>
+   				<if test="beganUpdateTime != null and beganUpdateTime != ''">
+   					AND c.updateTime &lt;= #{beganUpdateTime}
+   				</if>
+   				<if test="endUpdateTime != null and endUpdateTime != ''">
+   					AND c.updateTime &gt;= #{endUpdateTime}
+   				</if>
+   			</where>
+   </select>
+   
+   <delete id="deleteCase" parameterType="java.lang.String">
+   		DELETE FROM com_case WHERE ID IN
+   		<foreach collection="array" separator="," item="id" open="(" close=")">
+	   		#{id}
+	   	</foreach>
+   </delete>
+   
+   <insert id="saveCase" parameterType="java.util.Map">
+   		INSERT INTO com_case
+   			<trim prefix="(" suffix=")" suffixOverrides=",">
+   				title,saveTime,author,
+   				<if test="content != null and content != ''">
+   					content,
+   				</if>
+   				<if test="status != null and status != ''">
+   					status,
+   				</if>
+   			</trim>
+   			VALUES
+   			<trim prefix="(" suffix=")" suffixOverrides=",">
+   				#{title},#{saveTime},#{author},
+   				<if test="content != null and content != ''">
+   					#{content},
+   				</if>
+   				<if test="status != null and status != ''">
+   					#{status}
+   				</if>
+   			</trim>
+   			<selectKey resultType="java.lang.Integer" keyProperty="id" >
+            	SELECT @@IDENTITY AS "ID"
+        	</selectKey>
+   </insert>
+   
+   <update id="updateCase" parameterType="java.util.Map" >
+   		UPDATE com_case 
+   			<set>
+   			<if test="status != null and status != ''">status = #{status},</if>
+   			<if test="content != null and content != ''">content = #{content}</if>
+   			</set>
+   			WHERE ID = #{id}
+   </update>
+   
+   
+</mapper>

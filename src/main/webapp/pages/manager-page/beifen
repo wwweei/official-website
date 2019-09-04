@@ -1,0 +1,17 @@
+$('#productNo').textbos('setText', '<%=light.getProductNo()%>');
+$('#productName').textbos('setText', '<%=light.getProductName()%>');
+$('#reflector').textbos('setText', '<%=light.getReflector()%>');
+$('#ceiling').textbos('setText', '<%=light.getCeiling()%>');
+$('#lampSource').textbos('setText', '<%=light.getLampSource()%>');
+$('#lumenOutput').textbos('setText', '<%=light.getLumenOutput()%>');
+$('#colourTemperature').textbos('setText', '<%=light.getColourTemperature()%>');
+$('#power').textbos('setText', '<%=light.getPower()%>');
+$('#system_efficiency').textbos('setText', '<%=light.getSystem_efficiency()%>');
+$('#average_life').textbos('setText', '<%=light.getAverage_life()%>');
+$('#CRI').textbos('setText', '<%=light.getCRI()%>');
+$('#optimumWorkingTemperature').textbos('setText', '<%=light.getOptimumWorkingTemperature()%>');
+$('#heatSink').textbos('setText', '<%=light.getHeatSink()%>');
+$('#cable').textbos('setText', '<%=light.getCable()%>');
+$('#insulation').textbos('setText', '<%=light.getInsulation()%>');
+$('#protection').textbos('setText', '<%=light.getProtection()%>');
+$('#productClazz').combotree('setText', '<%=light.getProductClazzId()%>');

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuchen.website.dao.manager.ProClazzDao">
+    <!-- 对象映射，可以不写 -->
+    
+    <!-- 查询功能，resultType 设置返回值类型 -->
+   <select id="getProClazzListForAddLight" resultType="java.util.Map">
+   		SELECT  pc.ID				as "id",
+   				pc.class_name		as "text",
+				parentId			as "_parentId"
+   			FROM product_class pc
+   </select>
+
+   <select id="getProClazzList" resultType="java.util.Map">
+   		SELECT  pc.ID				as "ID",
+   				pc.class_name		as "clazzName",
+				parentId			as "_parentId"
+   			FROM product_class pc
+   </select>
+   
+   <insert id="saveProClazz" parameterType="java.util.Map">
+   		INSERT INTO product_class
+   			<trim prefix="(" suffix=")" suffixOverrides=",">
+   				class_name, saveTime,
+   				<if test="parentId != null and parentId != ''">
+   					parentId
+   				</if>
+   			</trim>
+   			VALUES
+   			<trim prefix="(" suffix=")" suffixOverrides=",">
+   				#{clazzName}, #{saveTime},
+   				<if test="parentId != null and parentId != ''">
+   					#{parentId}
+   				</if>
+   			</trim>
+   </insert>
+   
+   <delete id="deleteProClazz" parameterType="java.lang.String">
+   		DELETE FROM product_class WHERE id in
+   		<foreach collection="array" separator="," item="id" open="(" close=")">
+	   		#{id}
+	   	</foreach>
+   </delete>
+</mapper>

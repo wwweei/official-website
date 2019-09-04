@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wuchen.website.dao.manager.ScrollDao">
+    <!-- 对象映射，可以不写 -->
+    
+    <!-- 查询功能，resultType 设置返回值类型 -->
+    
+    <select id="getScrollPicList" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT  img.id				as "ID",
+    			img.pic_name		as "picName",
+    			img.savetime		as "saveTime",
+    			img.author			as "author",
+    			img.isShow			as "isShow",
+    			img.weight			as "weight"
+    		FROM images img
+    		WHERE img.page_name = "index"
+    			<if test="picName != null and picName != ''">
+    				AND img.pic_name = #{picName}
+    			</if>
+    			<if test="isShow != null and isShow != ''">
+    				AND img.isShow = #{isShow}
+    			</if>
+    			<if test="beganDate != null and beganDate != ''">
+    				AND img.saveTime &lt;= #{beganDate}
+    			</if>
+    			<if test="endDate != null and endDate != ''">
+    				AND img.saveTime &gt;= #{endDate}
+    			</if>
+    		ORDER BY img.savetime DESC
+    </select>
+   
+   <select id="getPicUrl" parameterType="java.lang.String" resultType="java.util.Map">
+   		SELECT img.url as "url" FROM images img WHERE img.id = #{id}
+   </select>
+   
+   <update id="updatePic" parameterType="java.util.Map">
+   		UPDATE images set pic_name = #{picName}, isShow = #{isShow}, weight = #{weight} where id = #{id};
+   </update>
+   
+   <insert id="addPic" parameterType="java.util.Map">
+   		INSERT INTO images(page_name, class_name, pic_name, url, saveTime, author, isShow, weight)
+   			VALUES(#{pageName}, #{className}, #{picName}, #{url}, #{saveTime}, #{author.userName}, #{isShow}, #{weight})
+   </insert>
+   
+   <delete id="deletePic" parameterType="java.lang.String">
+   		DELETE FROM images WHERE id IN
+	   	<foreach collection="array" separator="," item="id" open="(" close=")">
+	   		#{id}
+	   	</foreach>
+   </delete>
+   
+   <select id="getTotalPicSize" resultType="java.lang.String">
+   		SELECT COUNT(id) as "total" from images;
+   </select>
+   
+</mapper>
